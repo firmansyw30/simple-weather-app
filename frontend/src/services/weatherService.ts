@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: "/api/weather" });
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
+const api = axios.create({
+  baseURL: apiBaseUrl ? `${apiBaseUrl}/api/weather` : "/api/weather",
+});
 
 export interface CurrentWeather {
   city: string;
