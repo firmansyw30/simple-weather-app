@@ -14,6 +14,12 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/weather", weatherRoutes);
 
-app.listen(config.port, () => {
-  console.log(`Backend running on http://localhost:${config.port}`);
+// For local testing
+// app.listen(config.port, () => {
+//   console.log(`Backend running on http://localhost:${config.port}`);
+// });
+
+// For Docker deployment
+app.listen(config.port, "0.0.0.0", () => {
+  console.log(`Backend running on http://0.0.0.0:${config.port}`);
 });
