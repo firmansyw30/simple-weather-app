@@ -1,0 +1,30 @@
+services:
+  # ============================================================
+  # Backend Application
+  # ============================================================
+  backend:
+    container_name: weather-api
+    image: weather-backend-registry:latest
+    environment:
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN}
+      INFISICAL_TOKEN: ${INFISICAL_TOKEN}
+    expose:
+      - "3001"
+    restart: unless-stopped
+    
+  # ============================================================
+  # Frontend + Public Reverse Proxy
+  # ============================================================
+  frontend:
+    container_name: weather-frontend
+    image: weather-frontend-registry:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+
+    depends_on:
+      - backend
+    restart: unless-stopped
