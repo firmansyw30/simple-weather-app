@@ -48,6 +48,12 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold text-center text-gray-800">
           Weather Dashboard
         </h1>
+        <h2 className="text-xl font-semibold text-center text-gray-600">
+          {urlCity || "Bandung"}
+        </h2>
+        <p className="text-center text-gray-500">
+          Powered by OpenWeatherMap
+        </p>
 
         <SearchBar onSearch={handleSearch} />
 
