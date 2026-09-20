@@ -3,28 +3,23 @@ services:
   # Backend Application
   # ============================================================
   backend:
-    container_name: weather-api
-    image: weather-backend-registry:latest
+    container_name: be-weather-app
+    image: firmansyw30/be-weather-app:latest
     environment:
       INFISICAL_DOMAIN: ${INFISICAL_DOMAIN}
       INFISICAL_TOKEN: ${INFISICAL_TOKEN}
-    expose:
-      - "3001"
+    ports:
+      - "127.0.0.1:3000:3000"
     restart: unless-stopped
-    
+
   # ============================================================
-  # Frontend + Public Reverse Proxy
+  # Frontend
   # ============================================================
   frontend:
-    container_name: weather-frontend
-    image: weather-frontend-registry:latest
+    container_name: fe-weather-app
+    image: firmansyw30/fe-weather-app:latest
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /var/www/certbot:/var/www/certbot:ro
-
+       - "127.0.0.1:8080:80"
     depends_on:
       - backend
     restart: unless-stopped
