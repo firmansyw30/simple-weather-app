@@ -1,0 +1,62 @@
+name: Build & Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - frontend/**
+      - docker-compose.yml
+      - .github/workflows/build-fe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-fe
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          file: frontend/Dockerfile
+          build-args: |
+            INFISICAL_PROJECT_ID=${{ secrets.FE_INFISICAL_PROJECT_ID }}
+          secrets: |
+            infisical_token=${{ secrets.INFISICAL_TOKEN }}
+          push: true
+          tags: firmansyw30/fe-weather-app:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy Frontend
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            docker pull firmansyw30/fe-weather-app:latest
+            docker compose up -d --force-recreate frontend
