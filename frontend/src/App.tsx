@@ -5,7 +5,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/city/Jakarta" replace />} />
+        <Route path="/" element={<Navigate to="/city/Bandung" replace />} />
         <Route path="/city/:city" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
