@@ -1,8 +1,6 @@
 # syntax=docker/dockerfile:1
 
 ARG NODE_VERSION=24
-ARG INFISICAL_PROJECT_ID
-ENV INFISICAL_PROJECT_ID=$INFISICAL_PROJECT_ID
 
 ################################################################################
 # Base
@@ -25,6 +23,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Build
 FROM deps AS build
 
+ARG INFISICAL_PROJECT_ID
+ENV INFISICAL_PROJECT_ID=$INFISICAL_PROJECT_ID
+
 # Install Infisical CLI
 RUN apk add --no-cache bash wget \
     && wget -qO- 'https://artifacts-cli.infisical.com/setup.apk.sh' | sh \
@@ -39,7 +40,7 @@ RUN --mount=type=secret,id=infisical_token \
     INFISICAL_TOKEN=$(cat /run/secrets/infisical_token) \
     infisical run \
     --projectId=${INFISICAL_PROJECT_ID} \
-    --env=alpha \
+    --env=dev \
     -- \
     npm run build
 
@@ -47,8 +48,6 @@ RUN --mount=type=secret,id=infisical_token \
 ################################################################################
 # Runtime
 FROM nginx:alpine AS final
-
-USER node
 
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
