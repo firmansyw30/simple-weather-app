@@ -35,7 +35,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    loadWeather(urlCity || "Jakarta");
+    loadWeather(urlCity || "Bandung");
   }, [urlCity]);
 
   const handleSearch = (city: string) => {
