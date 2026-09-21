@@ -12,6 +12,7 @@ A simple full-stack weather dashboard built with **TypeScript backend** (Express
 | Secret Management | Infisical | 
 | Container | Docker |
 | Reverse Proxy | Nginx |
+| Automation | Github Action |
 
 ## Project Structure
 
