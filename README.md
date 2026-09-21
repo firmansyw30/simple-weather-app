@@ -9,6 +9,9 @@ A simple full-stack weather dashboard built with **TypeScript backend** (Express
 | Backend | Node.js, Express, TypeScript, Axios |
 | Frontend | React 19, Vite 6, TypeScript, Tailwind CSS, Chart.js |
 | API | OpenWeatherMap (free tier) |
+| Secret Management | Infisical | 
+| Container | Docker |
+| Reverse Proxy | Nginx |
 
 ## Project Structure
 
